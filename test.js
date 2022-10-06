@@ -872,21 +872,12 @@ const searchTransactions = (arr, obj) => {
     if (obj.sort) {
         arr.sort((a,b) => {
             if (valueSort[0] === "-") {
-
                 let tempValueSort = valueSort.slice(1, valueSort.length)
 
-                if (typeof a[tempValueSort] === "number") {
-                      return  b[tempValueSort] - a[tempValueSort]
-                } else {
-                    return  b[tempValueSort] > a[tempValueSort] ? 1 : -1
-                }
-
+                return b[tempValueSort] > a[tempValueSort] ? 1 : -1
             } else {
-                if (typeof a[valueSort] === "number") {
-                    return  a[valueSort] - b[valueSort]
-                } else {
-                    return  a[valueSort] > b[valueSort] ? 1 : -1
-                }
+
+                return  a[valueSort] > b[valueSort] ? 1 : -1
             }
         })
     }
