@@ -830,7 +830,7 @@ const a = [
 //*/
 
 const obj = {
-    sort : "_id",
+    sort : "-amount",
     searchText : "HR Лилиана",
     year  : 2022,
     month: 9
@@ -866,18 +866,47 @@ const searchTransactions = (arr, obj) => {
     arr = arr.filter(el => {
         return  searchTextFunc(el, "searchText") || fieldFunc(el, "year") || fieldFunc(el, "month")
     })
-    let valueSort = obj.sort
-    arr.sort((a,b) => {
-        if (obj.sort[0] === "-") {
-            return typeof a[valueSort] === "number"? a[valueSort] - b[valueSort] :  a[valueSort] > b[valueSort]? 1 : -1
-        }
-    })
 
-    return arr.length
+    let valueSort = obj.sort
+
+    if (obj.sort) {
+        arr.sort((a,b) => {
+            if (valueSort[0] === "-") {
+
+                let tempValueSort = valueSort.slice(1, valueSort.length)
+
+                if (typeof a[tempValueSort] === "number") {
+                      return  b[tempValueSort] - a[tempValueSort]
+                } else {
+                    return  b[tempValueSort] > a[tempValueSort] ? 1 : -1
+                }
+
+            } else {
+                if (typeof a[valueSort] === "number") {
+                    return  a[valueSort] - b[valueSort]
+                } else {
+                    return  a[valueSort] > b[valueSort] ? 1 : -1
+                }
+            }
+        })
+    }
+
+    return  arr
+}
+const getTotal = (arr, obj) => {
+    arr = searchTransactions(a, obj)
+    let sum = 0
+
+    for (let i = 0; i < arr.length; i++) {
+        sum += arr[i].split.reduce((acc, el) => acc + el.absAmount ,0)
+    }
+
+    return sum
 }
 
-
 console.log(searchTransactions(a, obj));
+console.log(getTotal(a, obj))
+
 
 
 
