@@ -829,75 +829,6 @@ const a = [
 //
 //*/
 
-/*const obj = {
-    sort : "-amount",
-    searchText : "HR Лилиана",
-    year  : 2022,
-    month: 9
-}
-
-const searchTransactions = (arr, obj) => {
-    const keys = Object.keys(obj)
-    if (keys.length === 0 ) {
-        return arr
-    }
-
-    const searchTextFunc = (el, field) => {
-        let flag = false
-
-        for (let i = 0; i < el.split.length; i++) {
-            flag = el.split[i].accountName === obj[field]
-        }
-
-        return flag;
-    }
-
-    const fieldFunc = (el, field) => {
-        let flag = false
-
-        for (let i = 0; i < el.split.length; i++) {
-            flag = el.split[i][field] === obj[field]
-        }
-
-        return flag
-
-    }
-
-    arr = arr.filter(el => {
-        return  searchTextFunc(el, "searchText") || fieldFunc(el, "year") || fieldFunc(el, "month")
-    })
-
-    let valueSort = obj.sort
-
-    if (obj.sort) {
-        arr.sort((a,b) => {
-            if (valueSort[0] === "-") {
-                let tempValueSort = valueSort.slice(1, valueSort.length)
-
-                return b[tempValueSort] > a[tempValueSort] ? 1 : -1
-            } else {
-
-                return  a[valueSort] > b[valueSort] ? 1 : -1
-            }
-        })
-    }
-
-    return  arr
-}
-const getTotal = (arr, obj) => {
-    arr = searchTransactions(a, obj)
-    let sum = 0
-
-    for (let i = 0; i < arr.length; i++) {
-        sum += arr[i].split.reduce((acc, el) => acc + el.absAmount ,0)
-    }
-
-    return sum
-}
-
-console.log(searchTransactions(a, obj));
-console.log(getTotal(a, obj))*/
-
 const obj = {
     sort: "amount",
     searchText: "HR Лилиана",
@@ -947,8 +878,8 @@ const searchTransactions = (arr, obj) => {
         return newArr
     }
 
-    let isAsk = obj.sort[0] !== "-"
-    let valueSort = isAsk ? obj.sort : obj.sort.slice(1, obj.sort.length)
+    const isAsk = obj.sort[0] !== "-"
+    const valueSort = isAsk ? obj.sort : obj.sort.slice(1, obj.sort.length)
 
     newArr.sort((a, b) => {
         let aBiggerThanB = a[valueSort] > b[valueSort]
