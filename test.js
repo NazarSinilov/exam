@@ -829,7 +829,7 @@ const a = [
 //
 //*/
 
-const obj = {
+/*const obj = {
     sort : "-amount",
     searchText : "HR Лилиана",
     year  : 2022,
@@ -896,8 +896,81 @@ const getTotal = (arr, obj) => {
 }
 
 console.log(searchTransactions(a, obj));
-console.log(getTotal(a, obj))
+console.log(getTotal(a, obj))*/
 
+const obj = {
+    sort: "amount",
+    searchText: "HR Лилиана",
+    year: 2022,
+    month: 9
+}
+
+const searchTransactions = (arr, obj) => {
+    const keys = Object.keys(obj)
+    if (keys.length === 0) {
+        return arr
+    }
+
+    const searchTextFunc = (el, field) => {
+        let flag = false
+
+        for (let i = 0; i < el.split.length; i++) {
+            flag = el.split[i].accountName === obj[field]
+            if (flag) {
+                return true
+            }
+        }
+
+        return flag;
+    }
+
+    const fieldFunc = (el, field) => {
+        let flag = false
+
+        for (let i = 0; i < el.split.length; i++) {
+            flag = el.split[i][field] === obj[field]
+            if (flag) {
+                return true
+            }
+        }
+
+        return flag
+
+    }
+
+    const newArr = arr.filter(el => {
+        return searchTextFunc(el, "searchText") || fieldFunc(el, "year") || fieldFunc(el, "month")
+    })
+
+
+    if (!obj.hasOwnProperty("sort")) {
+        return newArr
+    }
+
+    let isAsk = obj.sort[0] !== "-"
+    let valueSort = isAsk ? obj.sort : obj.sort.slice(1, obj.sort.length)
+
+    newArr.sort((a, b) => {
+        let aBiggerThanB = a[valueSort] > b[valueSort]
+        const compareCondition = isAsk ? aBiggerThanB : !aBiggerThanB;
+
+        return compareCondition ? 1 : -1
+    })
+
+
+    return newArr
+}
+
+const getTotal = (arr, obj) => {
+    return searchTransactions(a, obj).reduce((acc, el) => {
+        return acc + el.split.reduce((acc, el) => {
+            return acc + el.absAmount
+        }, 0)
+    }, 0)
+}
+
+console.log(searchTransactions(a, obj));
+console.log(getTotal(a, obj))
 
 
 
