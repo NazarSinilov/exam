@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="container">
+       <button id="getAllDataButton" onclick="getAllData()">Загрузить данные</button>
+        <div class="search-block">
+            <button id="searchButton" onclick="searchData()">Найти данные</button>
+            <input type="text" placeholder="sortBy" id="sortByInput">
+            <input type="text" placeholder="searchText" id="searchTextInput">
+
+            <input type="radio" id="radioAsk" name="radio" value="ask" >
+            <label for="radioAsk">Ask</label>
+
+            <input type="radio" id="radioDesk" name="radio" value="desk" >
+            <label for="radioDesk">Desk</label>
+        </div>
+        <button id="saveDataButton" onclick="saveData()">Сохранить результат</button>
+        <div class="content"></div>
+    </div>
+    <script src="todo.js"></script>
+</body>
+</html>
