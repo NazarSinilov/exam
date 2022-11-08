@@ -6,7 +6,7 @@ const {
     createNewData
 } = require("../controllers/task.controller")
 
-router.get("/all/data", getAllData)
+router.get("/data/all", getAllData)
 router.post("/data", createNewData)
 
 module.exports = router
