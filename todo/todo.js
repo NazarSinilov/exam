@@ -22,6 +22,7 @@ window.onload = () => {
 }
 
 const getAllData = async () => {
+
     try {
         const resp = await fetch(`${URL}data/all`, {
             method: "GET"
@@ -29,6 +30,7 @@ const getAllData = async () => {
         const result = await resp.json()
         dataArray = result.data
         content.innerHTML = dataArray
+        dataArray = JSON.parse(dataArray)
         blockButton()
     } catch (err) {
         new Error(err)
@@ -36,23 +38,17 @@ const getAllData = async () => {
 }
 
 const searchData = () => {
+
     try {
-        let sortDir = ""
-        dataArray = JSON.parse(dataArray)
+        let sortDir = radioAsk.checked ? "ask" : "desc"
+
         content.innerHTML = ""
-
-        if (radioAsk.checked) {
-            sortDir = "ask"
-
-        } else if (radioDesk.checked) {
-            sortDir = "desc"
-        }
 
         obj.sortBy = sortByValue.value;
         obj.sortDir = sortDir;
         obj.searchText = searchTextValue.value;
         obj.searchResult = dataArray;
-
+        console.log(obj)
         dataArray = searchTransactions(dataArray, obj)
         dataArray.forEach(el => {
             let task = document.createElement("div")
@@ -137,9 +133,7 @@ const saveData = async () => {
 
 const searchTransactions = (arr, obj) => {
 
-    const keys = Object.keys(obj)
-
-    if (keys.length === 0) {
+    if (!obj.sortBy && !obj.searchText) {
         return arr
     }
 
@@ -159,7 +153,6 @@ const searchTransactions = (arr, obj) => {
     let newArr = arr.filter(el => {
         return searchTextFunc(el, "searchText")
     })
-
 
     if (!obj.hasOwnProperty("sortBy")) {
         return newArr
