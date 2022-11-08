@@ -8,4 +8,4 @@ const searchScheme = new Schema({
     searchResult : String
 })
 
-module.exports = Search = mongoose.model("tasks", searchScheme)
+module.exports = Search = mongoose.model("search", searchScheme)
