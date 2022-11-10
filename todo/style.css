@@ -1,19 +1,16 @@
-
 .search-block {
-    margin: 30px 0;
+    margin: 20px 0;
 }
 
-.element {
-    margin: 20px;
+.resultElement {
+    margin: 20px 0;
 }
 
 button {
     background: green;
 }
 
-.disabled {
-    background: gray;
-}
+
 
 
 .lds-dual-ring {
@@ -28,8 +25,8 @@ button {
     height: 64px;
     margin: 8px;
     border-radius: 50%;
-    border: 6px solid #ff2727;
-    border-color: #2e56cc transparent #1f2ec9 transparent;
+    border: 6px solid #b22727;
+    border-color: #226c77 transparent #242c8c transparent;
     animation: lds-dual-ring 1.2s linear infinite;
 }
 @keyframes lds-dual-ring {

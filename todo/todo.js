@@ -1,14 +1,12 @@
-let dataArray = sessionStorage.getItem("data") || []
+const sortByValue = document.querySelector("#inputSortBy")
+const searchTextValue = document.querySelector("#inputSearchText")
+const radioAsc = document.querySelector("#radioAsc")
 const content = document.querySelector(".content")
-
-const sortByValue = document.querySelector("#sortByInput")
-const searchTextValue = document.querySelector("#searchTextInput")
-const radioAsk = document.querySelector("#radioAsk")
-const radioDesk = document.querySelector("#radioDesk")
-const searchButton = document.querySelector("#searchButton")
-const saveDataButton = document.querySelector("#saveDataButton")
 const getAllDataButton = document.querySelector("#getAllDataButton")
+const searchDataButton = document.querySelector("#searchDataButton")
+const saveDataButton = document.querySelector("#saveDataButton")
 
+let dataArray = sessionStorage.getItem("data") || []
 const obj = {}
 
 const URL = "http://localhost:8000/"
@@ -24,14 +22,17 @@ window.onload = () => {
 const getAllData = async () => {
 
     try {
+        blockButton()
+
         const resp = await fetch(`${URL}data/all`, {
             method: "GET"
         })
+
         const result = await resp.json()
         dataArray = result.data
         content.innerHTML = dataArray
         dataArray = JSON.parse(dataArray)
-        blockButton()
+
     } catch (err) {
         new Error(err)
     }
@@ -40,63 +41,41 @@ const getAllData = async () => {
 const searchData = () => {
 
     try {
-        let sortDir = radioAsk.checked ? "ask" : "desc"
+        blockButton()
 
+        const sortDir = radioAsc.checked ? "asc" : "desc"
         content.innerHTML = ""
 
-        obj.sortBy = sortByValue.value;
-        obj.sortDir = sortDir;
-        obj.searchText = searchTextValue.value;
-        obj.searchResult = dataArray;
+        obj.sortBy = sortByValue.value
+        obj.searchText = searchTextValue.value
+        obj.sortDir = sortDir
         console.log(obj)
         dataArray = searchTransactions(dataArray, obj)
+
         dataArray.forEach(el => {
-            let task = document.createElement("div")
-            task.classList.add("element")
-            task.innerText = JSON.stringify(el)
-            content.appendChild(task)
+            const resultElement = document.createElement("div")
+            resultElement.classList.add("resultElement")
+            resultElement.innerText = JSON.stringify(el)
+            content.appendChild(resultElement)
         })
 
         sessionStorage.setItem("data", JSON.stringify(dataArray))
 
     } catch (err) {
-        new Error(err)
+
     }
-
 }
 
-const blockButton = () => {
-    searchButton.disabled = !searchButton.disabled
-    saveDataButton.disabled = !saveDataButton.disabled
-    searchButton.classList.add("disabled")
-    saveDataButton.classList.add("disabled")
-
-    setTimeout(() => {
-        searchButton.classList.remove("disabled")
-        saveDataButton.classList.remove("disabled")
-        searchButton.disabled = !searchButton.disabled
-        saveDataButton.disabled = !saveDataButton.disabled
-    }, 5000)
-}
-
-const blockInterface = (control) => {
-    searchButton.disabled = !searchButton.disabled
-    saveDataButton.disabled = !saveDataButton.disabled
-    getAllDataButton.disabled = !getAllDataButton.disabled
-
-    searchButton.classList[control]("disabled")
-    saveDataButton.classList[control]("disabled")
-    getAllDataButton.classList[control]("disabled")
-}
 
 const saveData = async () => {
 
     try {
-        blockInterface("add")
+        blockInterface("gray")
+        content.innerHTML = ""
+
         const loader = document.createElement("div")
         loader.classList.add("lds-dual-ring")
         content.appendChild(loader)
-        dataArray = JSON.stringify(dataArray)
 
         const resp = await fetch(`${URL}data`, {
             method: "POST",
@@ -105,31 +84,59 @@ const saveData = async () => {
                 sortBy: obj.sortBy,
                 sortDir: obj.sortDir,
                 searchText: obj.searchText,
-                searchResult: dataArray
+                searchResult: JSON.stringify(dataArray)
             })
         })
 
-        if (resp) {
-            loader.remove()
-            blockInterface("remove")
-        }
-
         const result = await resp.json()
-        const saveComplete = document.createElement("div")
-        saveComplete.innerText = "Данные успешно сохранены"
 
-        if (result) {
-            content.appendChild(saveComplete)
+        if (result.data.success) {
+
+            const dataSave = document.createElement("div")
+
+            dataSave.innerText = "Данные сохранены"
+            content.appendChild(dataSave)
+
+            setTimeout( () => {
+                dataSave.remove()
+            },3000)
+            blockInterface("green")
+            loader.remove()
         }
-
-        setTimeout(() => {
-            saveComplete.remove()
-        }, 3000)
 
     } catch (err) {
         new Error(err)
     }
 }
+
+const blockButton = () => {
+
+    searchDataButton.disabled = !searchDataButton.disabled
+    saveDataButton.disabled = !saveDataButton.disabled
+
+    searchDataButton.style.background = "gray"
+    saveDataButton.style.background = "gray"
+
+    setTimeout( ()=> {
+        searchDataButton.disabled = !searchDataButton.disabled
+        saveDataButton.disabled = !saveDataButton.disabled
+
+        searchDataButton.style.background = "green"
+        saveDataButton.style.background = "green"
+
+    } , 5000)
+}
+
+const blockInterface = (color) => {
+    searchDataButton.disabled = !searchDataButton.disabled
+    saveDataButton.disabled = !saveDataButton.disabled
+    getAllDataButton.disabled = !getAllDataButton.disabled
+
+    searchDataButton.style.background = color
+    saveDataButton.style.background = color
+    getAllDataButton.style.background = color
+}
+
 
 const searchTransactions = (arr, obj) => {
 
@@ -162,3 +169,7 @@ const searchTransactions = (arr, obj) => {
 
     return newArr
 }
+
+
+
+
